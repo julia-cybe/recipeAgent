@@ -1,2 +1,4 @@
-fastapi
-uvicorn
+Django~=4.2.0
+psycopg2-binary~=2.9.0
+djangorestframework~=3.14.0
+python-dotenv~=0.21.0

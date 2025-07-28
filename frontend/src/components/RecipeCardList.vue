@@ -22,34 +22,16 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { fetchRecipes } from '../services/recipeService';
+import type { Recipe } from '../types/recipe';
 
-interface Ingredient {
-  id: number;
-  name: string;
-  quantity: number;
-  unit: string;
-}
-
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  preparation_steps: string;
-  ingredients: Ingredient[];
-}
 
 const recipes = ref<Recipe[]>([]);
 
 onMounted(async () => {
   try {
-    const token = localStorage.getItem('access');
-    const response = await axios.get('http://localhost:8000/api/my-recipes/', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    recipes.value = response.data;
+    const response = await fetchRecipes();
+    recipes.value = response;
     console.log('Recipes loaded:', recipes.value);
   } catch (e) {
     // Handle error (e.g., show a toast or redirect to login)

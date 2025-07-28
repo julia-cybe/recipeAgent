@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginForm from '../components/LoginForm.vue';
-import RegisterForm from '../components/RegisterForm.vue';
-import Home from '../components/Home.vue';
+import AddRecipeForm from '../components/AddRecipeForm.vue';
 import RecipeCardList from '../components/RecipeCardList.vue';
+import Home from '../components/Home.vue';
 
 const routes = [
   {
@@ -16,15 +16,15 @@ const routes = [
     component: LoginForm,
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: RegisterForm
-  }, 
+    path: '/add-recipe',
+    name: 'AddRecipe',
+    component: AddRecipeForm,
+  },
   {
     path: '/my-recipes',
-    name: 'MyRecipes',
+    name: 'RecipeCardList',
     component: RecipeCardList,
-  }
+  },
 ];
 
 const router = createRouter({

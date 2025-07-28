@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Home Page</h1>
+    <h1>Recipe Manager</h1>
     <p>Welcome to the recipe app!</p>
     <button @click="handleLogout">Logout</button>
   </div>

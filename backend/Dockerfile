@@ -15,5 +15,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy project files
 COPY . /app/
 
-# Run Django development server (adjust for production)
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Entrypoint: run migrations, then start server
+CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]

@@ -12,9 +12,7 @@ services:
 
   web:
     build: .
-    command: >
-      sh -c "python manage.py migrate &&
-            python manage.py runserver 0.0.0.0:8000"
+    # Use the default CMD from Dockerfile, which runs migrations and then the server
     volumes:
       - .:/app
     ports:

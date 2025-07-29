@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from rest_framework import generics, permissions, status
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -40,6 +40,23 @@ class LogoutView(generics.GenericAPIView):
             return Response(status=204)
         except Exception as e:
             return Response(status=400)
+        
+class TokenRefreshView(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        refresh = request.data.get('refresh')
+        if not refresh:
+            return Response({'error': 'Refresh token is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            token = RefreshToken(refresh)
+            return Response({
+                'access': str(token.access_token),
+            })
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
 class UserRecipeListView(generics.ListAPIView):
     serializer_class = RecipeSerializer

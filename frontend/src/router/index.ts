@@ -3,12 +3,18 @@ import LoginForm from '../components/LoginForm.vue';
 import AddRecipeForm from '../components/AddRecipeForm.vue';
 import RecipeCardList from '../components/RecipeCardList.vue';
 import Home from '../components/Home.vue';
+import RegisterForm from '../components/RegisterForm.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterForm,
   },
   {
     path: '/login',

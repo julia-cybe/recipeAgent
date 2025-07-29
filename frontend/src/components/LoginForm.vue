@@ -29,16 +29,27 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="handleLogin">
-    <div>
-      <label for="username">Username</label>
-      <input id="username" v-model="username" type="text" required />
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+      <h2 class="text-center text-2xl font-bold text-gray-900">Sign in to your account</h2>
+      <form class="space-y-6" @submit.prevent="handleLogin">
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+          <input id="username" v-model="username" type="text" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <input id="password" v-model="password" type="password" required
+            class="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+        </div>
+        <div v-if="error" class="text-red-600 text-sm">{{ error }}</div>
+        <button type="submit" :disabled="loading"
+          class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50">
+          <span v-if="loading">Signing in...</span>
+          <span v-else>Sign in</span>
+        </button>
+      </form>
     </div>
-    <div>
-      <label for="password">Password</label>
-      <input id="password" v-model="password" type="password" required />
-    </div>
-    <button type="submit" :disabled="loading">Login</button>
-    <div v-if="error" style="color: red;">{{ error }}</div>
-  </form>
+  </div>
 </template>

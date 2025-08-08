@@ -71,3 +71,69 @@ class RecipeCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+        
+class RecipeFileUploadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        file = request.FILES.get('file')
+        if not file:
+            return Response({'error': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            from PIL import Image
+            import pytesseract
+            image = Image.open(file)
+            text = pytesseract.image_to_string(image)
+        except Exception as e:
+            return Response({'error': f'Failed to process image: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Simple parsing logic (customize as needed)
+        # Expecting format: Title: ...\nDescription: ...\nPreparation Steps: ...\nIngredients: ...
+        title = ''
+        description = ''
+        preparation_steps = ''
+        ingredients = []
+        lines = text.split('\n')
+        current_section = None
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            if line.lower().startswith('title:'):
+                title = line[6:].strip()
+                current_section = 'title'
+            elif line.lower().startswith('description:'):
+                description = line[12:].strip()
+                current_section = 'description'
+            elif line.lower().startswith('preparation steps:'):
+                preparation_steps = line[18:].strip()
+                current_section = 'preparation_steps'
+            elif line.lower().startswith('ingredients:'):
+                current_section = 'ingredients'
+            elif current_section == 'ingredients':
+                # Example ingredient line: "2 cups flour"
+                parts = line.split()
+                if len(parts) >= 3:
+                    try:
+                        quantity = float(parts[0])
+                        unit = parts[1]
+                        name = ' '.join(parts[2:])
+                        ingredients.append({'name': name, 'quantity': quantity, 'unit': unit})
+                    except Exception:
+                        continue
+        if not title:
+            title = 'Untitled Recipe'
+        recipe_data = {
+            'title': title,
+            'description': description,
+            'preparation_steps': preparation_steps,
+            'ingredients': ingredients,
+        }
+        serializer = RecipeSerializer(data=recipe_data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

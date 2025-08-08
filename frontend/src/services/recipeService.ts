@@ -19,3 +19,12 @@ function updateAuthHeaderWithToken() {
     api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 }
+export async function uploadRecipeFile(file: File): Promise<void> {
+  const formData = new FormData();
+  formData.append('file', file);
+  await api.post(`${API_BASE_URL}/recipes/upload/`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}
